@@ -102,3 +102,39 @@ users table =>
     - Product 
     - Stock 
     - Order 
+
+
+## HTTP Response codes
+    100-199 ===> Information response
+
+    200-299 ===> Success Response 
+    
+    300-399 ===> Redirectional Response
+
+    400-499 ===> Client Error Reponse 
+
+    500-599 ===> Server Error response
+
+
+    200 => Success Ok
+    201 => Created
+
+    400 => Bad request 
+    401 => Unauthorized
+    403 => Access Denied/ Forbidden 
+    404 => Not found 
+    405 => Method not allowed
+    408 => Request Timed Out
+    422 => Unprocessable entity
+
+
+### MVC Pattern 
+
+
+    Routes =====> Middleware =====> Controller 
+                    ===> Validation/Process/Business logice run
+                        ===> error 
+                        ===> Response
+
+#### Controller 
+    - that class/function which perform some logical operation

@@ -1,34 +1,23 @@
 const express = require("express");
 const app = express();
 
-// Create two routes, /user, /user/create
-// in routes/user.routes.js 
-// mount that route file to app.js of root directory and test
-const routes = require("./routes/auth.routes");
-const user_routes = require('./routes/user.routes');
-
-// Inventory Management System 
-
-const logger = (req, res, next) => {
-    console.log("I am first call");
-    let date = (new Date()).toLocaleDateString()
-    let ip = req.socket.remoteAddress;
-    // 2023-02-08 08:00:00T5+45 => 8/2/2023
-    console.log("Loogger: ------ "+date+" -------- "+ip)
-    // call next scope
-    next();
-}
+const routes = require("./routes")
+const logger = require("./app/middleware/logger.middleware");
 
 // route mount
-app.use(logger, routes);
-app.use(user_routes);
+app.use("/api/v1", logger, routes);
 
 // handle 404
-app.use((req,res) => {
-    res.status(404).json({
-        result: "Not found",
+app.use((req,res, next) => {
+    next({status: 404, msg: "Resource not found"});
+})
+
+//error handling middleware 
+app.use((error, req, res, next) => {
+    res.status(error.status).json({
+        result:null,
+        msg: error.msg,
         status: false, 
-        msg: "Not found",
         meta: null
     })
 })
