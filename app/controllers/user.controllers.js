@@ -1,5 +1,5 @@
-class UserController{
-    createUser =(req, res, next) => {
+class UserController {
+    createUser = (req, res, next) => {
         // TODO: 
     }
 
