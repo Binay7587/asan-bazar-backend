@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Broadway-Mern-Team/express-17#readme",
   "dependencies": {
     "express": "^4.18.2",
-    "joi": "^17.7.1"
+    "joi": "^17.7.1",
+    "multer": "^1.4.5-lts.1"
   }
 }
