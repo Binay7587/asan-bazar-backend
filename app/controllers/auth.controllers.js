@@ -14,9 +14,6 @@ class AuthController {
             })
         }
         catch (err) {
-            // if (err?.details) {
-            //     err.message = err.details[0].message;
-            // }
             next({ status: 400, msg: err.message });
         }
     }
