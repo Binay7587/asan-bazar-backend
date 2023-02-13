@@ -1,20 +1,29 @@
+const userService = require('../services/user.service.js');
 class AuthController {
-    registerProcess = (req, res, next) => {
-        // 
-        res.json({
-            result: null, 
-            msg: "Hello there",
-            status: true, 
-            meta: null
-        })
+    registerProcess = async (req, res, next) => {
+        try {
+            let payload = req.body;
+            //validation
+            let validatedData = await userService.validateRegisterData(payload);
+
+            res.json({
+                result: payload,
+                msg: "Hello there",
+                status: true,
+                meta: null
+            })
+        }
+        catch (err) {
+            next({ status: 400, msg: err.message });
+        }
     }
 
     loginProcess = (req, res, next) => {
         // TODO: 
         res.json({
-            result: null, 
+            result: null,
             msg: "Hello there",
-            status: true, 
+            status: true,
             meta: null
         })
     }
@@ -24,7 +33,7 @@ class AuthController {
     }
 
     loggedInProfile = (req, res, next) => {
-        
+
     }
 }
 
