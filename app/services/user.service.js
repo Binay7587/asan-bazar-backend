@@ -1,17 +1,26 @@
+const Joi = require('joi');
+
 class UserService {
     validateRegisterData(data) {
         if (!data) {
             throw new Error('Empty payload.');
-        } else if (!data.name) {
-            throw new Error('Name is required.');
-        } else if (!data.email) {
-            throw new Error('Email is required.');
-        } else if (!data.password) {
-            throw new Error('Password is required.');
-        } else if (!data.confirmPassword) {
-            throw new Error('Confirm Password is required.');
-        } else if (data.password !== data.confirmPassword) {
-            throw new Error('Password and Confirm Password must be same.');
+        } else {
+            const userSchema = Joi.object().keys({
+                name: Joi.string()
+                    .min(5)
+                    .max(30)
+                    .required(),
+                email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org'] } }).required(),
+                password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+                confirmPassword: Joi.ref('password'),
+                role: Joi.any().valid('admin', 'user'),
+                status: Joi.string().valid('active', 'inactive'),
+                address: Joi.string(),
+                phone: Joi.string().min(10),
+            });
+
+            let response = userSchema.validateAsync(data);
+            return response;
         }
     }
 }

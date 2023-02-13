@@ -7,13 +7,16 @@ class AuthController {
             let validatedData = await userService.validateRegisterData(payload);
 
             res.json({
-                result: payload,
+                result: validatedData,
                 msg: "Hello there",
                 status: true,
                 meta: null
             })
         }
         catch (err) {
+            // if (err?.details) {
+            //     err.message = err.details[0].message;
+            // }
             next({ status: 400, msg: err.message });
         }
     }
