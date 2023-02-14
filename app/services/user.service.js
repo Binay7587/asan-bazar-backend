@@ -18,6 +18,7 @@ class UserService {
                     status: Joi.string().valid('active', 'inactive'),
                     address: Joi.string(),
                     phone: Joi.string().min(10),
+                    image: Joi.string().empty(),
                 });
 
                 let response = await userSchema.validateAsync(data);

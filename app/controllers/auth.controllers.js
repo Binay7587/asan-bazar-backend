@@ -3,6 +3,9 @@ class AuthController {
     registerProcess = async (req, res, next) => {
         try {
             let payload = req.body;
+            if (req.file) {
+                payload.image = req.file.filename;
+            }
             //validation
             let validatedData = await userService.validateRegisterData(payload);
 
@@ -14,6 +17,7 @@ class AuthController {
             })
         }
         catch (err) {
+            console.log(err);
             next({ status: 400, msg: err.message });
         }
     }
