@@ -26,6 +26,8 @@ app.use((error, req, res, next) => {
         if (error.code === "LIMIT_FILE_SIZE") {
             msg = "File size is too large. Max limit is 1MB";
         }
+    } else if (error.code === "ENOENT") {
+        msg = "No such file or directory";
     }
     res.status(status).json({
         result: null,
