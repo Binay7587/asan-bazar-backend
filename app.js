@@ -3,6 +3,7 @@ const app = express();
 
 const routes = require("./routes")
 const logger = require("./app/middleware/logger.middleware");
+const { MulterError } = require("multer");
 
 // parse application/json
 app.use(express.json())
@@ -19,9 +20,16 @@ app.use((req, res, next) => {
 
 //error handling middleware 
 app.use((error, req, res, next) => {
-    res.status(error.status).json({
+    let status = error.status || 400;
+    let msg = error.msg || "Something went wrong";
+    if (error instanceof MulterError) {
+        if (error.code === "LIMIT_FILE_SIZE") {
+            msg = "File size is too large. Max limit is 1MB";
+        }
+    }
+    res.status(status).json({
         result: null,
-        msg: error.msg,
+        msg: msg,
         status: false,
         meta: null
     })
