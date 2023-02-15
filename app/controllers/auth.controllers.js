@@ -1,4 +1,6 @@
 const userService = require('../services/user.service.js');
+const bcrypt = require('bcryptjs');
+
 class AuthController {
     registerProcess = async (req, res, next) => {
         try {
@@ -8,6 +10,9 @@ class AuthController {
             }
             //validation
             let validatedData = await userService.validateRegisterData(payload);
+            //password encryption
+            validatedData.password = await bcrypt.hash(validatedData.password, 10);
+            // bcrypt.compare("password", hashedPassword);
 
             res.json({
                 result: validatedData,
