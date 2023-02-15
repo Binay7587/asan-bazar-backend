@@ -1,5 +1,6 @@
 const userService = require('../services/user.service.js');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 class AuthController {
     registerProcess = async (req, res, next) => {
@@ -28,12 +29,22 @@ class AuthController {
     }
 
     loginProcess = (req, res, next) => {
-        // TODO: 
+        let detail = {
+            _id: 1,
+            name: "Admin User",
+            email: "admin@broadway.com",
+            password: "$2a$10$HOvvBxEgPKKQQzXQzrGTLO74MKCHCHd7BhVujSK3ip / f4fjjFtyke",
+            confirmPassword: "superadmin",
+            role: "admin",
+            status: "active",
+            address: "Tinkune, Kathmandu",
+            phone: " + 977 9000000000",
+            image: "1676489077266 - 0.9149544986686298 - repository - open - graph - template.png"
+        };
+        let token = jwt.sign({ userId: detail._id }, "$ecReT", { expiresIn: "1h" });
         res.json({
-            result: null,
-            msg: "Hello there",
-            status: true,
-            meta: null
+            detail: detail,
+            token: token
         })
     }
 
