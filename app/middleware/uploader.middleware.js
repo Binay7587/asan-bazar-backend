@@ -2,9 +2,16 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+const makeDir = (dir = null) => {
+    return (req, res, next) => {
+        req.dir = dir;
+        next();
+    }
+}
+
 const myStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = './public/uploads/';
+        const uploadPath = req.dir ?? './public/uploads';
 
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });
@@ -27,13 +34,15 @@ const imageFilter = (req, file, cb) => {
     cb({ status: 400, msg: 'File upload only supports the following filetypes - ' + filetypes });
 }
 
-const uploader = multer({
+const upload = multer({
     storage: myStorage,
-    dest: './public/uploads/',
     fileFilter: imageFilter,
     limits: {
         fileSize: 1000000
     },
 });
 
-module.exports = uploader;
+module.exports = {
+    makeDir,
+    upload
+};
