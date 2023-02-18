@@ -7,7 +7,7 @@ class AuthController {
         try {
             let payload = req.body;
             if (req.file) {
-                payload.image = req.file.filename;
+                payload.user_image = `/uploads/user_image/${req.file.filename}`;
             }
             //validation
             let validatedData = await userService.validateRegisterData(payload);

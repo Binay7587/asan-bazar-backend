@@ -13,12 +13,12 @@ class UserService {
                         .required(),
                     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org'] } }).required(),
                     password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-                    confirmPassword: Joi.ref('password'),
+                    confirm_password: Joi.ref('password'),
                     role: Joi.any().valid('admin', 'user'),
                     status: Joi.string().valid('active', 'inactive'),
                     address: Joi.string(),
                     phone: Joi.string().min(10),
-                    image: Joi.string().empty(),
+                    user_image: Joi.string().empty(),
                 });
 
                 let response = await userSchema.validateAsync(data);
