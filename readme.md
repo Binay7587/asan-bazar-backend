@@ -65,7 +65,7 @@ Table of Contents
 ## Introduction
 The MERN stack is a popular technology stack used for developing full-stack web applications. It consists of four key technologies: MongoDB, Express.js, React.js, and Node.js.
 
-This repository is a collection of resources aimed at helping beginners learn how to build full-stack web applications using this technology stack. It includes step-by-step guides, sample code snippets, and other useful resources that provide a comprehensive overview of the MERN stack. Whether you are a seasoned developer looking to expand your skillset or a beginner just starting with web development, this repository is a great resource to help you get started with the MERN stack.
+This repository is intended for fellow learners and developers who are interested in learning the MERN stack or building full-stack web applications. Feel free to clone or fork this repository, use the code as a reference, or contribute to the project by making pull requests.
  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
