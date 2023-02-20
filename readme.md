@@ -48,6 +48,17 @@ Table of Contents
 - [Middlewares in Express](#middlewares-in-express)
 - [Inventory Management System](#inventory-management-system)
 - [HTTP Response codes](#http-response-codes)
+- [Authorization](#authorization)
+- [SMTP Protocol](#smtp-protocol)
+- [Nodemailer](#nodemailer)
+- [JWT](#jwt)
+- [MONGODB](#mongodb)
+  - [Three ways of using MongoDB](#three-ways-of-using-mongodb)
+  - [CRUD Operations](#crud-operations)
+  - [Filter Operators](#filter-operators)
+  - [Update Operators](#update-operators)
+  - [Aggregation Operators](#aggregation-operators)
+  - [MongoDb Projection](#mongodb-projection)
 
 
 <!-- INTRODUCTION -->
@@ -157,6 +168,131 @@ Middlewares are functions that are executed in between the request and response 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Authorization
+- <b>Public routes</b>
+  <p>Web content</p>
+- <b>Private routes</b>
+  <p>Prevented by auth middleware using JWT token</p>
+- <b>Auth middleware</b>
+  <p>It uses JWT token to verify user</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## SMTP Protocol
+SMTP (Simple Mail Transfer Protocol) is a protocol used to send emails from one server to another. It is a client-server protocol, where the client is the email client (e.g. Outlook, Thunderbird, or Gmail) and the server is the email server (e.g. Gmail, Yahoo, or Outlook.com). The SMTP protocol is used to send emails from the client to the server, and the server then delivers the email to the recipient.
+
+    -> Host  => Hostname of the SMTP server 
+    -> Port  => Port number of the SMTP server
+    -> User  => Username of the SMTP server
+    -> Pass  => Password of the SMTP server
+    -> TLS   => Enable/Disable TLS encryption (true/false)
+
+## Nodemailer
+Nodemailer is a module for Node.js applications to allow easy as cake email sending. The project got started back in 2010 when there was no sane option to send email messages, today it is the solution most Node.js users turn to by default.
+To install nodemailer, run the following command in your terminal:
+```sh
+    npm install nodemailer
+```
+Code snippet to send an email using nodemailer:
+```sh
+    const nodemailer = require('nodemailer');
+
+    // create reusable transporter object using the default SMTP transport
+    let transport = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+        user: 'username',
+        pass: 'password'
+      }
+    });
+
+    // send mail with defined transport object
+    let info = await transport.sendMail({
+      from: 'noreply@binayakarki.com.np', // sender address
+      to: 'me@binayakarki.com.np, test@binayakarki.com.np', // list of receivers
+      subject: 'Hello ✔', // Subject line
+      text: "Hello world?", // plain text body
+      html: "<b>Hello world?</b>", // html body
+    });
+```
+
+## JWT
+JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
+
+    -> Header 
+    -> Payload 
+    -> Signature
+
+## MONGODB
+MongoDB is a cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas. MongoDB is developed by MongoDB Inc. and licensed under the Server Side Public License.
+
+### Three ways of using MongoDB
+    -> MongoDB Compass
+    -> MongoDB Shell
+    -> MongoDB Atlas
+    
+### CRUD Operations
+    -> Create
+      - db.users.insertOne({name: 'Binay', age: 23})   //inserts one document
+      - db.users.insertMany([{name: 'Binay', age: 23}, {name: 'Biraj', age: 20}}])  //inserts multiple documents
+
+    -> Read 
+      - db.users.findOne({name: 'Binay'})   //returns the first document of the users collection
+      - db.users.find({name: 'Binay Karki'})  //returns all the data of the users collection
+
+    -> Update 
+      - db.users.updateOne({name: 'Binaya Karki'}, {$set: {role: 'admin'}}) //updates the first document of the users collection
+      - db.users.updateMany({name: 'Binaya Karki'}, {$set: {role: 'user'}})  //updates all the documents of the users collection - It has first parameter as filter and second parameter as update object and third parameter as options where we can use upsert: true to insert the document if it doesn't exist. Its false by default
+
+    -> Delete
+      - db.users.deleteOne({name: 'Binay'})  //deletes the first document of the users collection
+      - db.users.deleteMany({name: 'Binay'}) //deletes all the documents of the users collection - Passing empty object deletes all the documents of the users collection
+
+### Filter Operators
+    -> Equal to => {name: 'Binay'}
+    -> Greater than => {age: {$gt: 20}}
+    -> Greater than or equal to => {age: {$gte: 20}}
+    -> Less than => {age: {$lt: 20}}
+    -> Less than or equal to => {age: {$lte: 20}}
+    -> Not equal to => {age: {$ne: 20}}
+    -> In => {age: {$in: [20, 21, 22]}}
+    -> Not in => {age: {$nin: [20, 21, 22]}}
+    -> And => {$and: [{age: {$gt: 20}}, {age: {$lt: 30}}]}
+    -> Or => {$or: [{age: {$gt: 20}}, {age: {$lt: 30}}]}
+    -> Nor => {$nor: [{age: {$gt: 20}}, {age: {$lt: 30}}]}
+    -> Exists => {age: {$exists: true}}
+    -> Not exists => {age: {$exists: false}}
+    -> Regex => {name: {$regex: /^Binay/}}
+    -> Not regex => {name: {$not: {$regex: /^Binay/}}}
+    -> Text => {$text: {$search: 'Binay Karki'}}
+    -> Not text => {$text: {$search: 'Binay Karki', $caseSensitive: true}}
+    -> Where => {$where: 'this.age > 20'}
+
+### Update Operators
+    -> Set => {$set: {name: 'Binay Karki'}}
+    -> Unset => {$unset: {name: ''}}
+    -> Inc => {$inc: {age: 1}}
+    -> Mul => {$mul: {age: 2}}
+    -> Min => {$min: {age: 20}}
+    -> Max => {$max: {age: 20}}
+    -> Current Date => {$currentDate: {lastModified: true}}
+    -> Rename => {$rename: {name: 'fullName'}}
+    -> Array => {$push: {hobbies: 'Coding'}}
+
+### Aggregation Operators
+    -> $project => {name: 1, age: 1, _id: 0}
+    -> $match => {$match: {age: {$gt: 20}}}
+    -> $limit => {$limit: 2}
+    -> $skip => {$skip: 2}
+    -> $sort => {$sort: {age: -1}}
+    -> $group => {$group: {_id: '$age', count: {$sum: 1}}}
+    -> $unwind => {$unwind: '$hobbies'}
+    -> $lookup => {$lookup: {from: 'users', localField: 'age', foreignField: 'age', as: 'users'}}
+
+### MongoDb Projection
+    -> Inclusion => {name: 1, age: 1, _id: 0}
+    -> Exclusion => {name: 0, age: 0, _id: 0}
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
