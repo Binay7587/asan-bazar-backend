@@ -57,43 +57,45 @@ class AuthController {
     }
 
     loginProcess = (req, res, next) => {
-        // TODO: Login process
         let data = req.body;
-        let detail = {
-            _id: 1,
-            name: "Admin User",
-            email: "admin@broadway.com",
-            password: "$2a$10$Sj16j8aSGiGCO.CyJHC3Qu13QLodI/2yCCZIkaReJNUTa/5pXyygO",
-            confirmPassword: "superadmin",
-            role: "admin",
-            status: "active",
-            address: "Tinkune, Kathmandu",
-            phone: " + 977 9000000000",
-            image: "1676489077266 - 0.9149544986686298 - repository - open - graph - template.png"
-        };
+        MongoClient.connect(dbUrl)
+            .then(client => {
+                // Selection of database
+                let db = client.db('learning-mern');
+                // Selection of collection
+                db.collection('users').findOne({ email: data.email })
+                    .then(result => {
+                        if (!result) {
+                            return next({ status: 400, msg: "Invalid email or password" });
+                        } else if (bcrypt.compareSync(data.password, result.password)) {
+                            let token = jwt.sign({ _id: result._id, role: result.role }, AppConstants.JWT_SECRET, { expiresIn: '1d' });
 
-        if (!detail) {
-            return next({ status: 400, msg: "Invalid email or password" });
-        } else if (bcrypt.compareSync(data.password, detail.password)) {
-            let token = jwt.sign({ _id: detail._id, role: detail.role }, AppConstants.JWT_SECRET, { expiresIn: '1d' });
+                            sendEmail({
+                                from: 'noreply@test.com',
+                                to: result.email,
+                                subject: 'Successfully Logged In!',
+                                textMessage: `Dear ${result.name},\n\n We wanted to let you know that a successful login was made to your account on ${new Date}. If this was you, there is no need to take any further action. \n If this was not you, please contact us immediately. \n Thank you for using our service. \n\n Regards, \n ${AppConstants.APP_NAME}`,
+                                htmlMessage: `<p>Dear ${result.name},</p><p>We wanted to let you know that a successful login was made to your account on ${new Date}. If this was you, there is no need to take any further action.</p><p>If this was not you, please contact us immediately.</p><p>Thank you for using our service.</p><p>Regards,</p><p>${AppConstants.APP_NAME}</p>`
+                            });
 
-            sendEmail({
-                from: 'noreply@test.com',
-                to: detail.email,
-                subject: 'Successfully Logged In!',
-                textMessage: `Dear ${detail.name},\n\n We wanted to let you know that a successful login was made to your account on ${new Date}. If this was you, there is no need to take any further action. \n If this was not you, please contact us immediately. \n Thank you for using our service. \n\n Regards, \n ${AppConstants.APP_NAME}`,
-                htmlMessage: `<p>Dear ${detail.name},</p><p>We wanted to let you know that a successful login was made to your account on ${new Date}. If this was you, there is no need to take any further action.</p><p>If this was not you, please contact us immediately.</p><p>Thank you for using our service.</p><p>Regards,</p><p>${AppConstants.APP_NAME}</p>`
+                            return res.json({
+                                result: token,
+                                msg: "Login successfull",
+                                status: true,
+                                meta: null
+                            });
+                        }
+                        else {
+                            return next({ status: 400, msg: "Invalid email or password" });
+                        }
+                    })
+                    .catch(err => {
+                        next({ status: 400, msg: err });
+                    });
+            })
+            .catch(err => {
+                next({ status: 400, msg: err });
             });
-
-            return res.json({
-                result: token,
-                msg: "Login successfull",
-                status: true,
-                meta: null
-            });
-        } else {
-            return next({ status: 400, msg: "Invalid email or password" });
-        }
     }
 
     changePasswordProcess = (req, res, next) => {
