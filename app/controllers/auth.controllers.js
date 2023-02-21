@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AppConstants = require('../../config/constants.js');
 const { sendEmail } = require('../services/mail.service.js');
+const { MongoClient } = require('mongodb');
+const dbUrl = "mongodb://127.0.0.1:27017";
 
 class AuthController {
     registerProcess = async (req, res, next) => {
@@ -15,25 +17,39 @@ class AuthController {
             let validatedData = await userService.validateRegisterData(payload);
             //password encryption
             validatedData.password = await bcrypt.hash(validatedData.password, 10);
-            // bcrypt.compare("password", hashedPassword);
 
             //TODO: save data
-            //Email notification
+            MongoClient.connect(dbUrl)
+                .then(client => {
+                    // Selection of database
+                    let db = client.db('learning-mern');
+                    // Selection of collection
+                    db.collection('users').insertOne(validatedData)
+                        .then(result => {
+                            //Email notification
+                            sendEmail({
+                                from: 'noreply@test.com',
+                                to: validatedData.email,
+                                subject: 'Account Registered!',
+                                textMessage: "Dear " + validatedData.name + ",\n\n" + 'Your account has been registered successfully.',
+                                htmlMessage: "<p>Dear " + validatedData.name + ",</p><p>Your account has been registered successfully.</p>"
+                            });
 
-            sendEmail({
-                from: 'noreply@test.com',
-                to: validatedData.email,
-                subject: 'Account Registered!',
-                textMessage: "Dear " + validatedData.name + ",\n\n" + 'Your account has been registered successfully.',
-                htmlMessage: "<p>Dear " + validatedData.name + ",</p><p>Your account has been registered successfully.</p>"
-            });
+                            res.json({
+                                result: result,
+                                msg: "Your account has been registered successfully.",
+                                status: true,
+                                meta: null
+                            })
+                        })
+                        .catch(err => {
+                            next({ status: 400, msg: err });
+                        });
 
-            res.json({
-                result: validatedData,
-                msg: "Hello there",
-                status: true,
-                meta: null
-            })
+                })
+                .catch(err => {
+                    next({ status: 400, msg: err });
+                });
         }
         catch (err) {
             next({ status: 400, msg: err.message });
