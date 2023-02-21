@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const AppConstants = require('../../config/constants.js');
+const { MongoClient, ObjectId } = require('mongodb');
+const dbUrl = "mongodb://127.0.0.1:27017";
 
 const authCheck = (req, res, next) => {
     try {
@@ -10,26 +12,28 @@ const authCheck = (req, res, next) => {
             if (!token || token === "null") return next({ status: 401, msg: "Unauthorized access" });
 
             let data = jwt.verify(token, AppConstants.JWT_SECRET);
-
-            //TODO: Check if user is available & active
-            let user = {
-                _id: 1,
-                name: "Admin User",
-                email: "admin@broadway.com",
-                password: "$2a$10$Sj16j8aSGiGCO.CyJHC3Qu13QLodI/2yCCZIkaReJNUTa/5pXyygO",
-                confirmPassword: "superadmin",
-                role: "admin",
-                status: "active",
-                address: "Tinkune, Kathmandu",
-                phone: " + 977 9000000000",
-                image: "1676489077266 - 0.9149544986686298 - repository - open - graph - template.png"
-            };
-            if (user && user.status === "active") {
-                req.authUser = user;
-                next();
-            } else {
-                return next({ status: 401, msg: "Unauthorized access" });
-            }
+            MongoClient.connect(dbUrl)
+                .then(client => {
+                    // Selection of database
+                    let db = client.db('learning-mern');
+                    // Selection of collection and find user
+                    db.collection('users').findOne({ _id: new ObjectId(data._id) })
+                        .then(result => {
+                            //Check if user is available & active
+                            if (result && result.status === "active") {
+                                req.authUser = result;
+                                next();
+                            } else {
+                                return next({ status: 401, msg: "Unauthorized access" });
+                            }
+                        })
+                        .catch(err => {
+                            next({ status: 400, msg: err });
+                        })
+                })
+                .catch(err => {
+                    next({ status: 400, msg: err });
+                });
         } else {
             return next({ status: 401, msg: "Unauthorized access" });
         }
