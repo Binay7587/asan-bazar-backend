@@ -37,7 +37,7 @@ class UserService extends MongoDBService {
 
     registerUser = async (data) => {
         try {
-            let response = await this.db.collection('users').insertOne(data);
+            let response = await this.addSingleRow('users', data);
             return response;
         }
         catch (err) {
@@ -47,7 +47,7 @@ class UserService extends MongoDBService {
 
     getUserByEmail = async (email) => {
         try {
-            let response = await this.db.collection('users').findOne({ email: email });
+            let response = await this.getSingleRow('users', { email: email });
             return response
         } catch (err) {
             throw err;
@@ -56,7 +56,7 @@ class UserService extends MongoDBService {
 
     getUserById = async (id) => {
         try {
-            let response = await this.db.collection('users').findOne({ _id: new ObjectId(id) });
+            let response = await this.getSingleRow('users', { _id: new ObjectId(id) });
             return response
         } catch (err) {
             throw err;
