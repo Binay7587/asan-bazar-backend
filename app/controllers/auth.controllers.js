@@ -36,7 +36,7 @@ class AuthController {
             });
         }
         catch (err) {
-            next({ status: 400, msg: err.message });
+            next({ status: 400, msg: err });
         }
     }
 
@@ -73,7 +73,7 @@ class AuthController {
             }
 
         } catch (err) {
-            next({ status: 400, msg: err.message });
+            next({ status: 400, msg: err });
         }
     }
 

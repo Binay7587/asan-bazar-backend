@@ -20,8 +20,8 @@ app.use((req, res, next) => {
 
 //error handling middleware 
 app.use((error, req, res, next) => {
-    let status = error.status || 400;
-    let msg = error.msg || "Something went wrong";
+    let status = error.status ?? 400;
+    let msg = error.msg ?? "Something went wrong";
     if (error instanceof MulterError) {
         if (error.code === "LIMIT_FILE_SIZE") {
             msg = "File size is too large. Max limit is 1MB";
