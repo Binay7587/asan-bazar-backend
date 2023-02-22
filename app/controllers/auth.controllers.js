@@ -44,28 +44,32 @@ class AuthController {
         try {
             let payload = req.body;
 
-            let response = await userService.getUserByEmail(payload.email);
+            let detail = await userService.getUserByEmail(payload.email);
 
-            if (bcrypt.compareSync(payload.password, response.password)) {
-                let token = jwt.sign({ _id: response._id, role: response.role }, AppConstants.JWT_SECRET, { expiresIn: '1d' });
+            if (!detail) {
+                throw ('Invalid email or password.');
+            } else {
+                if (bcrypt.compareSync(payload.password, detail.password)) {
+                    let token = jwt.sign({ _id: detail._id, role: detail.role }, AppConstants.JWT_SECRET, { expiresIn: '1d' });
 
-                sendEmail({
-                    from: 'noreply@test.com',
-                    to: response.email,
-                    subject: 'Successfully Logged In!',
-                    textMessage: `Dear ${response.name},\n\n We wanted to let you know that a successful login was made to your account on ${new Date}. If this was you, there is no need to take any further action. \n If this was not you, please contact us immediately. \n Thank you for using our service. \n\n Regards, \n ${AppConstants.APP_NAME}`,
-                    htmlMessage: `<p>Dear ${response.name},</p><p>We wanted to let you know that a successful login was made to your account on ${new Date}. If this was you, there is no need to take any further action.</p><p>If this was not you, please contact us immediately.</p><p>Thank you for using our service.</p><p>Regards,</p><p>${AppConstants.APP_NAME}</p>`
-                });
+                    sendEmail({
+                        from: 'noreply@test.com',
+                        to: detail.email,
+                        subject: 'Successfully Logged In!',
+                        textMessage: `Dear ${detail.name},\n\n We wanted to let you know that a successful login was made to your account on ${new Date}. If this was you, there is no need to take any further action. \n If this was not you, please contact us immediately. \n Thank you for using our service. \n\n Regards, \n ${AppConstants.APP_NAME}`,
+                        htmlMessage: `<p>Dear ${detail.name},</p><p>We wanted to let you know that a successful login was made to your account on ${new Date}. If this was you, there is no need to take any further action.</p><p>If this was not you, please contact us immediately.</p><p>Thank you for using our service.</p><p>Regards,</p><p>${AppConstants.APP_NAME}</p>`
+                    });
 
-                return res.json({
-                    result: token,
-                    msg: "Login successfull",
-                    status: true,
-                    meta: null
-                });
-            }
-            else {
-                throw ('Invalid credentials.');
+                    return res.json({
+                        result: token,
+                        msg: "Login successfull",
+                        status: true,
+                        meta: null
+                    });
+                }
+                else {
+                    throw ('Invalid email or password.');
+                }
             }
 
         } catch (err) {
