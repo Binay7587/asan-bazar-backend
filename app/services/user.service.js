@@ -1,6 +1,7 @@
 const Joi = require('joi');
+const MongoDBService = require('./mongoDB.service.js');
 
-class UserService {
+class UserService extends MongoDBService {
     validateRegisterData = async (data) => {
         try {
             if (!data) {
@@ -29,6 +30,25 @@ class UserService {
             if (err?.details) {
                 throw err.details[0];
             }
+            throw err;
+        }
+    }
+
+    registerUser = async (data) => {
+        try {
+            let response = await this.db.collection('users').insertOne(data);
+            return response;
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+
+    getUserByEmail = async (email) => {
+        try {
+            let response = await this.db.collection('users').findOne({ email: email });
+            return response
+        } catch (err) {
             throw err;
         }
     }
