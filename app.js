@@ -4,6 +4,8 @@ const app = express();
 const routes = require("./routes")
 const logger = require("./app/middleware/logger.middleware");
 const { MulterError } = require("multer");
+// Database connection
+const db = require("./config/db.config");
 
 // parse application/json
 app.use(express.json())
