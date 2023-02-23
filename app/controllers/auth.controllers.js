@@ -14,7 +14,7 @@ class AuthController {
                 throw ('Email already exists.');
             } else {
                 if (req.file) {
-                    payload.user_image = `/uploads/user_image/${req.file.filename}`;
+                    payload.userImage = `/uploads/userImage/${req.file.filename}`;
                 }
                 //validation
                 let validatedData = await userService.validateRegisterData(payload);
