@@ -8,6 +8,7 @@ class AuthController {
     registerProcess = async (req, res, next) => {
         try {
             let payload = req.body;
+            payload.address = JSON.parse(payload.address);
             let exists = await userService.getUserByEmail(payload.email);
             if (exists) {
                 throw ('Email already exists.');
@@ -41,6 +42,7 @@ class AuthController {
             }
         }
         catch (err) {
+            if (err.name === "SyntaxError") err = "Invalid JSON";
             next({ status: 400, msg: err });
         }
     }
