@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const { ObjectId } = require('mongodb');
 const UserModel = require('../model/user.model.js');
 
 class UserService {
@@ -23,8 +22,7 @@ class UserService {
                     userImage: Joi.string().empty(),
                 });
 
-                let response = await userSchema.validateAsync(data);
-                return response;
+                return await userSchema.validateAsync(data);
             }
         }
         catch (err) {
@@ -47,8 +45,7 @@ class UserService {
 
     getUserByEmail = async (email) => {
         try {
-            let response = await UserModel.findOne({ email: email });
-            return response
+            return await UserModel.findOne({ email: email });
         } catch (err) {
             throw err;
         }
@@ -56,8 +53,7 @@ class UserService {
 
     getUserById = async (id) => {
         try {
-            let response = await UserModel.findOne({ _id: new ObjectId(id) });
-            return response
+            return await UserModel.findById(id);
         } catch (err) {
             throw err;
         }
