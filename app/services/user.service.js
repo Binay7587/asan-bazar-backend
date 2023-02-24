@@ -33,6 +33,24 @@ class UserService {
         }
     }
 
+    validateChangePasswordData = async (data) => {
+        try {
+            const userSchema = Joi.object().keys({
+                email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org'] } }).required(),
+                password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+                confirmPassword: Joi.ref('password')
+            });
+
+            return await userSchema.validateAsync(data);
+        }
+        catch (err) {
+            if (err?.details) {
+                throw err.details[0];
+            }
+            throw err;
+        }
+    }
+
     registerUser = async (data) => {
         try {
             let user = new UserModel(data); // create new user
@@ -54,6 +72,22 @@ class UserService {
     getUserById = async (id) => {
         try {
             return await UserModel.findById(id);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    getAllUsers = async () => {
+        try {
+            return await UserModel.find();
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    updateUser = async (id, data) => {
+        try {
+            return await UserModel.findByIdAndUpdate(id, { $set: data });
         } catch (err) {
             throw err;
         }

@@ -84,8 +84,33 @@ class AuthController {
         }
     }
 
-    changePasswordProcess = (req, res, next) => {
+    changePasswordProcess = async (req, res, next) => {
+        try {
+            let payload = req.body;
+            // validate payload
+            let validatedData = await userService.validateChangePasswordData(payload);
 
+            let loggedInUser = req.authUser;
+            let toBeChanged = await userService.getUserByEmail(payload.email);
+
+            if (!toBeChanged) {
+                throw ('User doesn\'t exists.');
+            } else if (!loggedInUser._id.equals(toBeChanged._id)) {
+                throw ('You are not authorized to change password of this user.');
+            } else {
+                let hashedPassword = await bcrypt.hash(validatedData.password, 10);
+                let response = await userService.updateUser(loggedInUser._id, { password: hashedPassword });
+
+                res.json({
+                    result: response,
+                    msg: "Password changed successfully.",
+                    status: true,
+                    meta: null
+                });
+            }
+        } catch (err) {
+            next({ status: 400, msg: err });
+        }
     }
 
     loggedInProfile = (req, res, next) => {
