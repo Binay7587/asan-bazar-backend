@@ -8,7 +8,7 @@ const BannerSchema = new mongoose.Schema({
         minlength: 5,
         maxlength: 50,
     },
-    image: {
+    bannerImage: {
         type: String,
         default: null,
     },
