@@ -1,15 +1,17 @@
+require('dotenv').config()
+
 const AppConstants = {
-    APP_NAME: 'Learning MERN Stack',
-    JWT_SECRET: '$ecReT',
+    APP_NAME: process.env.APP_NAME || 'Learning MERN',
+    JWT_SECRET: process.env.JWT_SECRET,
     SMTP: {
-        HOST: 'sandbox.smtp.mailtrap.io',
-        PORT: 587,
-        USER: '07d8b4ac6a818e',
-        PASS: 'ed4081f636b1b4',
+        HOST: process.env.SMTP_HOST,
+        PORT: process.env.SMTP_PORT,
+        USER: process.env.SMTP_USER,
+        PASS: process.env.SMTP_PASS,
     },
     DATABASE: {
-        DB_URL: 'mongodb://127.0.0.1:27017',
-        DB_NAME: 'learning-mern',
+        DB_URL: process.env.DB_URL,
+        DB_NAME: process.env.DB_NAME,
     }
 }
 
