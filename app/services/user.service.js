@@ -15,7 +15,9 @@ class UserService {
                     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org'] } }).required(),
                     password: Joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,30}$/).required(),
                     confirmPassword: Joi.ref('password'),
-                    role: Joi.any().valid('admin', 'customer', 'seller'),
+                    role: Joi.any().valid('admin', 'customer', 'seller').messages({
+                        'any.only': 'Role must be admin, customer or seller'
+                    }),
                     status: Joi.string().valid('active', 'inactive'),
                     address: Joi.object(),
                     phone: Joi.string().min(10),

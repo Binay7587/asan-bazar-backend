@@ -68,7 +68,10 @@ class AuthController {
                     });
 
                     return res.json({
-                        result: token,
+                        result: {
+                            token: token,
+                            user: detail
+                        },
                         msg: "Login successfull",
                         status: true,
                         meta: null
