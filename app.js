@@ -41,11 +41,11 @@ app.use((error, req, res, next) => {
     })
 })
 
-app.listen(3005, 'localhost', (err) => {
+app.listen(process.env.SERVER_PORT, 'localhost', (err) => {
     if (err) {
-        console.log("Error listening to port 3005")
+        console.log(`Error listening to port ${process.env.SERVER_PORT}}`)
     } else {
-        console.log("Server is running on port 3005")
+        console.log(`Server is listening to port ${process.env.SERVER_PORT}`)
         console.log("Press CTRL+C to disconnect Server...")
     }
 })
