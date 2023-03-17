@@ -13,7 +13,7 @@ class UserService {
                         .max(30)
                         .required(),
                     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org'] } }).required(),
-                    password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+                    password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,30}$')).required(),
                     confirmPassword: Joi.ref('password'),
                     role: Joi.any().valid('admin', 'user'),
                     status: Joi.string().valid('active', 'inactive'),
@@ -37,7 +37,7 @@ class UserService {
         try {
             const userSchema = Joi.object().keys({
                 email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org'] } }).required(),
-                password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+                password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,30}$')).required(),
                 confirmPassword: Joi.ref('password')
             });
 
