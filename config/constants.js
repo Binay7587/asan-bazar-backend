@@ -12,7 +12,8 @@ const AppConstants = {
     DATABASE: {
         DB_URL: process.env.DB_URL,
         DB_NAME: process.env.DB_NAME,
-    }
+    },
+    SERVER_PORT: process.env.SERVER_PORT || 8080,
 }
 
 module.exports = AppConstants;
