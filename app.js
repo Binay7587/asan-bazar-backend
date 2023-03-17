@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
+app.use(cors());
 const routes = require("./routes")
 const logger = require("./app/middleware/logger.middleware");
 const { MulterError } = require("multer");
