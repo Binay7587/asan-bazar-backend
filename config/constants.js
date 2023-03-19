@@ -9,10 +9,7 @@ const AppConstants = {
         USER: process.env.SMTP_USER,
         PASS: process.env.SMTP_PASS,
     },
-    DATABASE: {
-        DB_URL: process.env.DB_URL,
-        DB_NAME: process.env.DB_NAME,
-    },
+    DB_URI: process.env.DB_URI,
     SERVER_PORT: process.env.SERVER_PORT || 8080,
 }
 
