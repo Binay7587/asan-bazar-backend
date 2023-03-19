@@ -2,7 +2,12 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-app.use(cors());
+const corsOptions = {
+    origin: 'https://learning-mern-stack-frontend.vercel.app',
+};
+
+app.use(cors(corsOptions));
+
 const routes = require("./routes")
 const logger = require("./app/middleware/logger.middleware");
 const { MulterError } = require("multer");
