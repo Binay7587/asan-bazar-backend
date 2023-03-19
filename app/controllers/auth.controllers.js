@@ -117,9 +117,17 @@ class AuthController {
     }
 
     loggedInProfile = (req, res, next) => {
+        let user = req.authUser;
 
         return res.json({
-            result: req.authUser,
+            result: {
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                userImage: user.userImage,
+                address: user.address,
+                phone: user.phone
+            },
             msg: "Profile fetched successfully",
             status: true,
             meta: null
