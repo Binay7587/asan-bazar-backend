@@ -6,7 +6,7 @@ const corsOptions = {
     origin: 'https://learning-mern-stack-frontend.vercel.app',
 };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 const routes = require("./routes")
 const logger = require("./app/middleware/logger.middleware");
@@ -20,7 +20,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 // route mount
-app.use("/api/v1", logger, routes);
+app.use("/api/v1", cors(corsOptions), logger, routes);
 
 // handle 404
 app.use((req, res, next) => {
