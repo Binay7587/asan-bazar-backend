@@ -49,7 +49,7 @@ class BannerController {
         try {
             let payload = req.body;
             if (req.file) {
-                payload.bannerImage = `/uploads/bannerImage/${req.file.filename}`;
+                payload.bannerImage = `/bannerImage/${req.file.filename}`;
             }
             //validation
             let validatedData = await bannerService.validateBanner(payload);
@@ -74,8 +74,8 @@ class BannerController {
             let payload = req.body;
             let bannerData = await bannerService.getBannerById(req.params.id);
             if (req.file) {
-                payload.bannerImage = `/uploads/bannerImage/${req.file.filename}`; // new image
-                deleteImage(`${process.cwd()}/public`, bannerData.bannerImage); // delete old image
+                payload.bannerImage = `/bannerImage/${req.file.filename}`; // new image
+                deleteImage(`${process.cwd()}/public/uploads/images`, bannerData.bannerImage); // delete old image
             } else {
                 payload.bannerImage = bannerData.bannerImage; // keep old image
             }
@@ -102,7 +102,7 @@ class BannerController {
             let response = await bannerService.deleteById(req.params.id);
             if (response) {
                 if (response.bannerImage) {
-                    deleteImage(`${process.cwd()}/public`, response.bannerImage);
+                    deleteImage(`${process.cwd()}/public/uploads/images`, response.bannerImage);
                 }
                 res.json({
                     result: response,
