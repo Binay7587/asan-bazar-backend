@@ -50,7 +50,7 @@ class BrandController {
         try {
             let payload = req.body;
             if (req.file) {
-                payload.brandImage = `/uploads/brandImage/${req.file.filename}`;
+                payload.brandImage = `/brandImage/${req.file.filename}`;
             }
 
             //validation
@@ -82,8 +82,8 @@ class BrandController {
             let payload = req.body;
             let brandData = await brandService.getBrandById(req.params.id);
             if (req.file) {
-                payload.brandImage = `/uploads/brandImage/${req.file.filename}`; // new image
-                deleteImage(`${process.cwd()}/public`, brandData.brandImage); // delete old image
+                payload.brandImage = `/brandImage/${req.file.filename}`; // new image
+                deleteImage(`${process.cwd()}/public/uploads/images`, brandData.brandImage); // delete old image
             } else {
                 payload.brandImage = brandData.brandImage; // keep old image
             }
@@ -110,7 +110,7 @@ class BrandController {
             let response = await brandService.deleteById(req.params.id);
             if (response) {
                 if (response.brandImage) {
-                    deleteImage(`${process.cwd()}/public`, response.brandImage);
+                    deleteImage(`${process.cwd()}/public/uploads/images`, response.brandImage);
                 }
                 res.json({
                     result: response,

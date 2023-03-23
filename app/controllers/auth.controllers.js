@@ -87,6 +87,17 @@ class AuthController {
         }
     }
 
+    logoutProcess = async (req, res, next) => {
+        let userDetail = req.authUser;
+        // Todo: Add logout functionality (Storing token in db)
+        return res.json({
+            result: null,
+            msg: "User Logout successfully",
+            status: true,
+            meta: null
+        })
+    }
+
     changePasswordProcess = async (req, res, next) => {
         try {
             let payload = req.body;
