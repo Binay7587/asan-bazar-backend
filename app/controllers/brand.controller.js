@@ -19,7 +19,7 @@ class BrandController {
                 meta: {
                     currentPage: currentPage,
                     perPage: perPage,
-                    total: await brandService.getCount()
+                    totalCount: await brandService.getCount()
                 }
             });
         }
