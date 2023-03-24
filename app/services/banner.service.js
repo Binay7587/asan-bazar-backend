@@ -42,7 +42,7 @@ class BannerService {
         try {
             let skip = (config.page - 1) * config.perPage;
             return await BannerModel.find()
-                .sort({ _id: 1 }) // Sort by ascending order
+                .sort({ _id: -1 }) // Sort by descending order
                 .skip(skip)
                 .limit(config.perPage);
         } catch (err) {
@@ -56,7 +56,7 @@ class BannerService {
             return await BannerModel.find({
                 status: 'active'
             })
-                .sort({ _id: 1 }) // Sort by ascending order
+                .sort({ _id: -1 }) // Sort by descending order
                 .limit(10);
         } catch (err) {
             throw err;

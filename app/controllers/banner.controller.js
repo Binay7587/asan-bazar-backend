@@ -18,7 +18,7 @@ class BannerController {
                 meta: {
                     currentPage: currentPage,
                     perPage: perPage,
-                    total: await bannerService.getCount()
+                    totalCount: await bannerService.getCount()
                 }
             });
         }
