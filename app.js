@@ -54,7 +54,7 @@ app.use((error, req, res, next) => {
     })
 })
 
-app.listen(process.env.SERVER_PORT, '127.0.0.1', (err) => {
+app.listen(process.env.SERVER_PORT, process.env.SERVER_HOST, (err) => {
     if (err) {
         console.log(`Error listening to port ${process.env.SERVER_PORT}}`)
     } else {
