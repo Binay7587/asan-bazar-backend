@@ -3,10 +3,15 @@
     "builds": [
       {
         "src": "app.js",
-        "use": "@vercel/node",
-        "timeout": 60
+        "use": "@vercel/node"
       }
     ],
+    "functions": {
+      "api/*": {
+        "memory": 512,
+        "maxDuration": 30
+      }
+    },
     "routes": [
       {
         "src": "/(.*)",
