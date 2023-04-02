@@ -12,9 +12,10 @@ class CategoryService {
                         .min(5)
                         .max(300)
                         .required(),
-                    parent: Joi.string().empty(),
+                    parent: Joi.string().allow(null, ''),
+                    featured: Joi.boolean().default(false),
                     status: Joi.string().valid('active', 'inactive'),
-                    categoryImage: Joi.string().empty(),
+                    categoryImage: Joi.string().allow(null, ''),
                 });
 
                 return await categorySchema.validateAsync(data);
@@ -38,7 +39,7 @@ class CategoryService {
     }
 
     // Get all categories
-    getAllCategories = async (config) => {
+    getAllCategoriesList = async (config) => {
         try {
             let skip = (config.page - 1) * config.perPage;
             return await CategoryModel.find()
@@ -46,6 +47,16 @@ class CategoryService {
                 .sort({ _id: -1 }) // Sort by descending order
                 .skip(skip)
                 .limit(config.perPage);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    getAllCategories = async () => {
+        try {
+            return await CategoryModel.find()
+                .populate('parent')
+                .sort({ _id: -1 }) // Sort by descending order
         } catch (err) {
             throw err;
         }
@@ -59,7 +70,6 @@ class CategoryService {
             })
                 .populate('parent')
                 .sort({ _id: -1 }) // Sort by descending order
-                .limit(10);
         } catch (err) {
             throw err;
         }

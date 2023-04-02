@@ -7,11 +7,12 @@ const router = require("express").Router();
 
 
 // Web 
-router.get("/active", categoryController.listActiveCategories);
+router.get("/all", categoryController.getAllCategories);
+router.get("/active", categoryController.getActiveCategories);
 
 // CMS
 router.route("/")
-    .get(authCheck, isAdmin, categoryController.listAllCategories)
+    .get(authCheck, isAdmin, categoryController.getAllCategoriesList)
     .post(authCheck, isAdmin, uploader.single('categoryImage'), categoryController.createCategory)
 
 router.route("/:id")

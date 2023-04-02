@@ -3,14 +3,13 @@ const categoryService = require('../services/category.service');
 const slugify = require('slugify');
 
 class CategoryController {
-    // List all categories
-    listAllCategories = async (req, res, next) => {
+    getAllCategoriesList = async (req, res, next) => {
         try {
             // ?page=1&perPage=10
             let currentPage = Number(req.query.page ?? 1);
             let perPage = Number(req.query.perPage ?? 10);
 
-            const categories = await categoryService.getAllCategories({ page: currentPage, perPage: perPage });
+            const categories = await categoryService.getAllCategoriesList({ page: currentPage, perPage: perPage });
 
             res.json({
                 result: categories,
@@ -28,14 +27,29 @@ class CategoryController {
         }
     }
 
-    // List active categories for homepage
-    listActiveCategories = async (req, res, next) => {
+    getActiveCategories = async (req, res, next) => {
         try {
             const categories = await categoryService.getActiveCategories();
 
             res.json({
                 result: categories,
                 msg: "Categories fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `List Error:  ${err.message ?? err}` });
+        }
+    }
+
+    getAllCategories = async (req, res, next) => {
+        try {
+            const categories = await categoryService.getAllCategories();
+
+            res.json({
+                result: categories,
+                msg: "All Categories fetched successfully.",
                 status: true,
                 meta: null
             });
@@ -54,8 +68,9 @@ class CategoryController {
             }
 
             //validation
+            payload.featured = payload?.featured && JSON.parse(payload.featured) == 1 ? true : false;
             let validatedData = await categoryService.validateCategory(payload);
-            validatedData.parent = validatedData.parent ?? null;
+            validatedData.parent = payload.parent !== null && payload.parent !== '' ? payload.parent : null;
 
             // Create Slug
             validatedData.slug = slugify(validatedData.title, {
@@ -107,8 +122,9 @@ class CategoryController {
                 payload.categoryImage = categoryData.categoryImage; // keep old image
             }
             //validation
+            payload.featured = payload?.featured && JSON.parse(payload.featured) == 1 ? true : false;
             let validatedData = await categoryService.validateCategory(payload);
-            validatedData.parent = validatedData.parent ?? null;
+            validatedData.parent = payload.parent !== null && payload.parent !== '' ? payload.parent : null;
             //save to db
             let category = await categoryService.updateCategory(req.params.id, validatedData);
 

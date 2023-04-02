@@ -24,6 +24,10 @@ const CategorySchema = new mongoose.Schema({
         ref: 'Category',
         default: null,
     },
+    featured: {
+        type: Boolean,
+        default: false,
+    },
     status: CommonSchema.status,
     createdBy: CommonSchema.createdBy,
 }, {
