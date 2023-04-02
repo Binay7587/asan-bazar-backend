@@ -86,7 +86,7 @@ class CategoryController {
             //validation
             payload.featured = payload?.featured && JSON.parse(payload.featured) == 1 ? true : false;
             let validatedData = await categoryService.validateCategory(payload);
-            validatedData.parent = payload.parent !== null && payload.parent !== '' ? payload.parent : null;
+            validatedData.parent = payload.parent !== null && payload.parent !== '' && payload.parent !== 'undefined' ? payload.parent : null;
 
             // Create Slug
             validatedData.slug = slugify(validatedData.title, {
@@ -140,7 +140,7 @@ class CategoryController {
             //validation
             payload.featured = payload?.featured && JSON.parse(payload.featured) == 1 ? true : false;
             let validatedData = await categoryService.validateCategory(payload);
-            validatedData.parent = payload.parent !== null && payload.parent !== '' ? payload.parent : null;
+            validatedData.parent = payload.parent !== null && payload.parent !== '' && payload.parent !== 'undefined' ? payload.parent : null;
             //save to db
             let category = await categoryService.updateCategory(req.params.id, validatedData);
 
