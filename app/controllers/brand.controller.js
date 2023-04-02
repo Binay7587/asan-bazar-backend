@@ -28,8 +28,8 @@ class BrandController {
         }
     }
 
-    // List brands for homepage
-    listForHomepage = async (req, res, next) => {
+    // List active brands for homepage
+    listActiveBrands = async (req, res, next) => {
         try {
             const brands = await brandService.getActiveBrands();
 
@@ -73,6 +73,23 @@ class BrandController {
         }
         catch (err) {
             next({ status: 400, msg: `Create Error: ${err}` });
+        }
+    }
+
+    fetchBrandById = async (req, res, next) => {
+        try {
+            let brand = await brandService.getBrandById(req.params.id);
+            if (!brand) {
+                throw ('Brand not found.');
+            }
+            res.json({
+                result: brand,
+                message: "Brand fetched successfully",
+                status: true,
+                meta: null
+            })
+        } catch (err) {
+            next({ status: 400, message: `Fetch error: ${err.message ?? err}` });
         }
     }
 

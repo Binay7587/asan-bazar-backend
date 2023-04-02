@@ -7,7 +7,7 @@ const router = require("express").Router();
 
 
 // Web 
-router.get("/list", brandController.listForHomepage);
+router.get("/active", brandController.listActiveBrands);
 
 // CMS
 router.route("/")
@@ -15,6 +15,7 @@ router.route("/")
     .post(authCheck, isAdmin, uploader.single('brandImage'), brandController.createBrand)
 
 router.route("/:id")
+    .get(authCheck, isAdmin, brandController.fetchBrandById)
     .put(authCheck, isAdmin, uploader.single('brandImage'), brandController.updateBrand)
     .delete(authCheck, isAdmin, brandController.deleteBrandById);
 
