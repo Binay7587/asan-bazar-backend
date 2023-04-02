@@ -75,6 +75,20 @@ class CategoryService {
         }
     }
 
+    // Get featured categories
+    getFeaturedCategories = async () => {
+        try {
+            return await CategoryModel.find({
+                featured: true,
+                status: 'active'
+            })
+                .populate('parent')
+                .sort({ _id: -1 }) // Sort by descending order
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Get category by id
     getCategoryById = async (id) => {
         try {

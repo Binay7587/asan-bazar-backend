@@ -43,6 +43,22 @@ class CategoryController {
         }
     }
 
+    getFeaturedCategories = async (req, res, next) => {
+        try {
+            const categories = await categoryService.getFeaturedCategories();
+
+            res.json({
+                result: categories,
+                msg: "Featured categories fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `List Error:  ${err.message ?? err}` });
+        }
+    }
+
     getAllCategories = async (req, res, next) => {
         try {
             const categories = await categoryService.getAllCategories();

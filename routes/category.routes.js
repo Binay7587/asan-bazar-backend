@@ -9,6 +9,7 @@ const router = require("express").Router();
 // Web 
 router.get("/all", categoryController.getAllCategories);
 router.get("/active", categoryController.getActiveCategories);
+router.get("/featured", categoryController.getFeaturedCategories);
 
 // CMS
 router.route("/")
