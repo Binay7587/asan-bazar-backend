@@ -3,6 +3,7 @@ require('dotenv').config()
 const AppConstants = {
     APP_NAME: process.env.APP_NAME || 'Learning MERN',
     JWT_SECRET: process.env.JWT_SECRET,
+    SALT_ROUNDS: 10,
     SMTP: {
         HOST: process.env.SMTP_HOST,
         PORT: process.env.SMTP_PORT,

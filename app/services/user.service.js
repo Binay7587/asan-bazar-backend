@@ -7,7 +7,10 @@ class UserService {
             if (!data) {
                 throw new Error('Empty payload.');
             } else {
-                const userSchema = Joi.object().keys({
+                const addressKeys = Joi.object({
+                    state: Joi.string(), district: Joi.string(), municipality: Joi.string(), street: Joi.string(), houseNumber: Joi.string(), postcode: Joi.string()
+                });
+                const userSchema = Joi.object({
                     name: Joi.string()
                         .min(5)
                         .max(30)
@@ -19,7 +22,7 @@ class UserService {
                         'any.only': 'Role must be admin, customer or seller'
                     }),
                     status: Joi.string().valid('active', 'inactive'),
-                    address: Joi.object(),
+                    address: Joi.object({ temp: addressKeys, perm: addressKeys }).required(),
                     phone: Joi.string().min(10),
                     userImage: Joi.string().empty(),
                 });
@@ -71,6 +74,42 @@ class UserService {
         }
     }
 
+    // Get Count
+    getCount = async () => {
+        try {
+            return await UserModel.count();
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Get all users
+    getAllUsers = async (config) => {
+        try {
+            let skip = (config.page - 1) * config.perPage;
+            return await UserModel.find()
+                .sort({ _id: -1 }) // Sort by descending order
+                .skip(skip)
+                .limit(config.perPage);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Get active users
+    getActiveUsers = async () => {
+        try {
+            return await UserModel.find({
+                status: 'active'
+            })
+                .sort({ _id: -1 }) // Sort by descending order
+                .limit(10);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Get user by id
     getUserById = async (id) => {
         try {
             return await UserModel.findById(id);
@@ -79,17 +118,19 @@ class UserService {
         }
     }
 
-    getAllUsers = async () => {
+    // Update user
+    updateUserById = async (id, data) => {
         try {
-            return await UserModel.find();
+            return await UserModel.findByIdAndUpdate(id, { $set: data }, { new: true });
         } catch (err) {
             throw err;
         }
     }
 
-    updateUser = async (id, data) => {
+    // Delete user
+    deleteUserById = async (id) => {
         try {
-            return await UserModel.findByIdAndUpdate(id, { $set: data });
+            return await UserModel.findByIdAndDelete(id);
         } catch (err) {
             throw err;
         }

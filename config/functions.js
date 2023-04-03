@@ -1,4 +1,6 @@
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
+const { SALT_ROUNDS } = require('./constants');
 
 const functionList = {
 
@@ -10,7 +12,11 @@ const functionList = {
         } else {
             return null;
         }
-    }
+    },
+
+    hashPassword: async (password) => {
+        return await bcrypt.hash(password, SALT_ROUNDS);
+    },
 }
 
 module.exports = functionList;
