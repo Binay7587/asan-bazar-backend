@@ -4,13 +4,13 @@ const slugify = require('slugify');
 
 class BrandController {
     // List all brands
-    listAllBrands = async (req, res, next) => {
+    getAllBrandsList = async (req, res, next) => {
         try {
             // ?page=1&perPage=10
             let currentPage = Number(req.query.page ?? 1);
             let perPage = Number(req.query.perPage ?? 10);
 
-            const brands = await brandService.getAllBrands({ page: currentPage, perPage: perPage });
+            const brands = await brandService.getAllBrandsList({ page: currentPage, perPage: perPage });
 
             res.json({
                 result: brands,
@@ -25,6 +25,22 @@ class BrandController {
         }
         catch (err) {
             next({ status: 400, msg: `List Error: ${err}` });
+        }
+    }
+
+    getAllBrands = async (req, res, next) => {
+        try {
+            const brands = await brandService.getAllBrands();
+
+            res.json({
+                result: brands,
+                msg: "All Brands fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `List Error:  ${err.message ?? err}` });
         }
     }
 

@@ -7,11 +7,12 @@ const router = require("express").Router();
 
 
 // Web 
+router.get("/all", brandController.getAllBrands);
 router.get("/active", brandController.listActiveBrands);
 
 // CMS
 router.route("/")
-    .get(authCheck, isAdmin, brandController.listAllBrands)
+    .get(authCheck, isAdmin, brandController.getAllBrandsList)
     .post(authCheck, isAdmin, uploader.single('brandImage'), brandController.createBrand)
 
 router.route("/:id")
