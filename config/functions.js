@@ -5,12 +5,25 @@ const { SALT_ROUNDS } = require('./constants');
 const functionList = {
 
     // delete image
-    deleteImage: async (path, name) => {
+    deleteImage: (path, name) => {
         let fullpath = path + name;
         if (fs.existsSync(fullpath)) {
             return fs.unlinkSync(fullpath)
         } else {
             return null;
+        }
+    },
+
+    deleteImages: (path, images) => {
+        if (images.length > 0) {
+            images.map((item) => {
+                let fullpath = path + item;
+                if (fs.existsSync(fullpath)) {
+                    return fs.unlinkSync(fullpath)
+                } else {
+                    return null;
+                }
+            })
         }
     },
 
