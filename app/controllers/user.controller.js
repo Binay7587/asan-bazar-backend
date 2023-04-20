@@ -44,6 +44,23 @@ class UserController {
         }
     }
 
+    // List Users by type
+    listUsersByType = async (req, res, next) => {
+        try {
+            const users = await userService.getUsersByType(req.params.type);
+
+            res.json({
+                result: users,
+                msg: "Users fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `List Error: ${err.message ?? err}` });
+        }
+    }
+
     // Create a new user
     storeUser = async (req, res, next) => {
         try {

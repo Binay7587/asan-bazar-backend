@@ -74,6 +74,18 @@ class UserService {
         }
     }
 
+    // Get user by user type
+    getUsersByType = async (type) => {
+        try {
+            return await UserModel.find({
+                role: type
+            })
+            .sort({ _id: -1 }) // Sort by descending order
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Get Count
     getCount = async () => {
         try {
