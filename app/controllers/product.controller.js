@@ -83,7 +83,7 @@ class ProductController {
             if (req.files && req.files.length > 0) {
                 let images = []
                 req.files.map((item) => {
-                    images.push(item.filename)
+                    images.push(`/productImage/${item.filename}`)
                 })
                 payload.productImage = images;
             }
