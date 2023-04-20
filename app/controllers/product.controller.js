@@ -1,4 +1,3 @@
-const { json } = require('express');
 const { deleteImages } = require('../../config/functions');
 const productService = require('../services/product.service');
 const slugify = require('slugify');
@@ -155,7 +154,7 @@ class ProductController {
             if (req.files && req.files.length > 0) {
                 let images = productData.productImage.length > 0 ? productData.productImage : [];
                 req.files.map((item) => {
-                    images.push(item.filename)
+                    images.push(`/productImage/${item.filename}`)
                 })
                 payload.productImage = images;
             } else {
@@ -170,14 +169,14 @@ class ProductController {
                     payload.productImage = dimages;
                     deleteImages(`${process.cwd()}/public/uploads/images`, delImages);
                 }
-            }        
+            }
             
             //validation
             payload.featured = payload?.featured && JSON.parse(payload.featured) == 1 ? true : false;
             payload.categoryId = payload.categoryId !== null && payload.categoryId !== '' && payload.categoryId !== 'undefined' ? JSON.parse(payload.categoryId) : null;
             payload.sellerId = payload.sellerId !== null && payload.sellerId !== '' && payload.sellerId !== 'undefined' ? payload.sellerId : null;
             payload.brand = payload.brand !== null && payload.brand !== '' && payload.brand !== 'undefined' ? payload.brand : null;
-            payload.delImages = payload.delImages !== null && payload.delImages !== '' && payload.delImages !== 'undefined' ? JSON.parse(payload.delImages) : null;
+            payload.delImages = payload.delImages !== null && payload.delImages !== '' && payload.delImages !== 'undefined' ? payload.delImages : null;
             let validatedData = await productService.validateProduct(payload);
             // Check if product title already exist
             const productByTitle = await productService.getProductByTitle(payload.title);
