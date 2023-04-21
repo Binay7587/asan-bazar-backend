@@ -98,16 +98,16 @@ class CategoryService {
         }
     }
 
-        // Get category by slug
-        getCategoryBySlug = async (slug) => {
-            try {
-                return await CategoryModel.findOne({
-                    slug: slug
-                }).populate('parent');
-            } catch (err) {
-                throw err;
-            }
+    // Get category by slug
+    getCategoryBySlug = async (slug) => {
+        try {
+            return await CategoryModel.findOne({
+                slug: slug
+            }).populate('parent');
+        } catch (err) {
+            throw err;
         }
+    }
 
     // Store category
     storeCategory = async (data) => {

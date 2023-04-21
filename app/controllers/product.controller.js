@@ -1,5 +1,6 @@
 const { deleteImages } = require('../../config/functions');
 const categoryService = require('../services/category.service');
+const brandService = require('../services/brand.service');
 const productService = require('../services/product.service');
 const slugify = require('slugify');
 
@@ -90,6 +91,29 @@ class ProductController {
                     products
                 },
                 msg: "All products fetched successfully by category slug.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `List Error:  ${err.message ?? err}` });
+        }
+    }
+
+    getProductsByBrandSlug = async (req, res, next) => {
+        try {
+            let brand = await brandService.getBrandBySlug(req.params.slug);
+            let products = await productService.getActiveProducts({
+                status: 'active',
+                brand: brand._id
+            });
+
+            res.json({
+                result: {
+                    brand,
+                    products
+                },
+                msg: "All products fetched successfully by brand slug.",
                 status: true,
                 meta: null
             });

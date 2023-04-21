@@ -81,6 +81,17 @@ class BrandService {
         }
     }
 
+    // Get brand by slug
+    getBrandBySlug = async (slug) => {
+        try {
+            return await BrandModel.findOne({
+                slug: slug
+            });
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Store brand
     storeBrand = async (data) => {
         try {

@@ -109,6 +109,23 @@ class BrandController {
         }
     }
 
+    fetchBrandBySlug = async (req, res, next) => {
+        try {
+            let brand = await brandService.getBrandBySlug(req.params.slug);
+            if (!brand) {
+                throw ('Brand not found.');
+            }
+            res.json({
+                result: brand,
+                message: "Brand fetched successfully",
+                status: true,
+                meta: null
+            })
+        } catch (err) {
+            next({ status: 400, message: `Fetch error: ${err.message ?? err}` });
+        }
+    }
+
     // Update a brand
     updateBrand = async (req, res, next) => {
         try {

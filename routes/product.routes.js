@@ -9,6 +9,7 @@ const router = require("express").Router();
 // Web 
 router.get("/active", productController.getActiveProducts);
 router.get("/category/:slug", productController.getProductsByCategorySlug);
+router.get("/brand/:slug", productController.getProductsByBrandSlug);
 
 // CMS
 router.route("/")
