@@ -107,7 +107,7 @@ class ProductController {
                 trim: true,       // trim leading and trailing replacement chars, defaults to `false`
             });
             validatedData.createdBy = req.authUser._id;
-            validatedData.afterDiscount = validatedData.price - (validatedData.price * validatedData.discount / 100);
+            validatedData.afterDiscount = Math.ceil(validatedData.price - (validatedData.price * validatedData.discount / 100));
 
             //save to db
             let product = await productService.storeProduct(validatedData);
@@ -191,7 +191,7 @@ class ProductController {
                 lower: true,      // convert to lower case, defaults to `false`
                 trim: true,       // trim leading and trailing replacement chars, defaults to `false`
             });
-            validatedData.afterDiscount = validatedData.price - (validatedData.price * validatedData.discount / 100);
+            validatedData.afterDiscount = Math.ceil(validatedData.price - (validatedData.price * validatedData.discount / 100));
 
             //save to db
             let product = await productService.updateProduct(req.params.id, validatedData);
