@@ -126,6 +126,23 @@ class CategoryController {
         }
     }
 
+    fetchCategoryBySlug = async (req, res, next) => {
+        try {
+            let category = await categoryService.getCategoryBySlug(req.params.slug);
+            if (!category) {
+                throw ('Category not found.');
+            }
+            res.json({
+                result: category,
+                message: "Category fetched successfully",
+                status: true,
+                meta: null
+            })
+        } catch (err) {
+            next({ status: 400, message: `Fetch error: ${err.message ?? err}` });
+        }
+    }
+
     // Update a category
     updateCategory = async (req, res, next) => {
         try {
