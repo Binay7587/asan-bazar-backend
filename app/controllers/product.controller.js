@@ -1,4 +1,5 @@
 const { deleteImages } = require('../../config/functions');
+const categoryService = require('../services/category.service');
 const productService = require('../services/product.service');
 const slugify = require('slugify');
 
@@ -66,6 +67,29 @@ class ProductController {
             res.json({
                 result: categories,
                 msg: "All Products fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `List Error:  ${err.message ?? err}` });
+        }
+    }
+
+    getProductsByCategorySlug = async (req, res, next) => {
+        try {
+            let category = await categoryService.getCategoryBySlug(req.params.slug);
+            let products = await productService.getActiveProducts({
+                status: 'active',
+                categoryId: { $in: [category._id] }
+            });
+
+            res.json({
+                result: {
+                    category,
+                    products
+                },
+                msg: "All products fetched successfully by category slug.",
                 status: true,
                 meta: null
             });
@@ -170,7 +194,7 @@ class ProductController {
                     deleteImages(`${process.cwd()}/public/uploads/images`, delImages);
                 }
             }
-            
+
             //validation
             payload.featured = payload?.featured && JSON.parse(payload.featured) == 1 ? true : false;
             payload.categoryId = payload.categoryId !== null && payload.categoryId !== '' && payload.categoryId !== 'undefined' ? JSON.parse(payload.categoryId) : null;
