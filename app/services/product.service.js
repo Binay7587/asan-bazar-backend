@@ -96,6 +96,18 @@ class ProductService {
         }
     }
 
+    // Get product by slug
+    getProductBySlug = async (slug) => {
+        try {
+            return await ProductModel.findOne({ slug: slug }).populate('categoryId')
+                .populate('sellerId')
+                .populate('brand')
+                .populate('createdBy');
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Store product
     storeProduct = async (data) => {
         try {

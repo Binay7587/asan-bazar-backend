@@ -189,6 +189,24 @@ class ProductController {
         }
     }
 
+    getProductBySlug = async (req, res, next) => {
+        try{
+            let product = await productService.getProductBySlug(req.params.slug);
+            if (!product) {
+                throw ('Product not found.');
+            }
+            res.json({
+                result: product,
+                message: "Product fetched successfully",
+                status: true,
+                meta: null
+            })
+        }
+        catch (err) {
+            next({ status: 400, message: `Fetch error: ${err.message ?? err}` });
+        }
+    }
+
     // Update a product
     updateProduct = async (req, res, next) => {
         try {
