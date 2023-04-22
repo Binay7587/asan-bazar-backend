@@ -70,7 +70,7 @@ class ProductService {
     }
 
     // Get active products
-    getActiveProducts = async (filter={status: active}) => {
+    getActiveProducts = async (filter = { status: 'active' }) => {
         try {
             return await ProductModel.find(filter)
                 .populate('categoryId')
