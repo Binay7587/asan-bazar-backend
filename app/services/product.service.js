@@ -15,7 +15,7 @@ class ProductService {
                     categoryId: Joi.array().items(Joi.string()).allow(null),
                     description: Joi.string().allow(null, ''),
                     price: Joi.number().min(1).required(),
-                    discount: Joi.number().min(1).max(100).default(0),
+                    discount: Joi.number().min(0).max(100).default(0),
                     status: Joi.string().valid('active', 'inactive').default('inactive'),
                     featured: Joi.boolean().default(false),
                     brand: Joi.string().allow(null, ''),
