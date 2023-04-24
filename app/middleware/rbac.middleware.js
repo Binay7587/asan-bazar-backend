@@ -5,8 +5,15 @@ const isAdmin = (req, res, next) => {
     next();
 }
 
-const isUser = (req, res, next) => {
-    if (req.authUser.role !== 'user') {
+const isCustomer = (req, res, next) => {
+    if (req.authUser.role !== 'customer') {
+        next({ status: 403, msg: 'You are not authorized to access.' });
+    }
+    next();
+}
+
+const isSeller = (req, res, next) => {
+    if (req.authUser.role !== 'seller') {
         next({ status: 403, msg: 'You are not authorized to access.' });
     }
     next();
@@ -14,5 +21,6 @@ const isUser = (req, res, next) => {
 
 module.exports = {
     isAdmin,
-    isUser
+    isCustomer,
+    isSeller
 }

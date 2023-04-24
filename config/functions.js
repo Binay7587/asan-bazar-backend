@@ -30,6 +30,16 @@ const functionList = {
     hashPassword: async (password) => {
         return await bcrypt.hash(password, SALT_ROUNDS);
     },
+
+    randomString: (len = 100) => {
+        let result = '';
+        const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charLength = char.length;
+        for (let i = 0; i < len; i++) {
+            result += char.charAt(Math.floor(Math.random() * charLength));
+        }
+        return result;
+    }
 }
 
 module.exports = functionList;

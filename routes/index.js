@@ -8,6 +8,7 @@ const cat_routes = require("./category.routes");
 const banner_routes = require("./banner.routes");
 const brand_routes = require("./brand.routes");
 const product_routes = require("./product.routes");
+const cart_routes = require("./cart.routes");
 
 router.use(auth_routes);
 router.use("/user", user_routes);
@@ -15,6 +16,7 @@ router.use("/category", cat_routes);
 router.use("/banner", banner_routes);
 router.use("/brand", brand_routes);
 router.use("/product", product_routes);
+router.use("/cart", cart_routes);
 
 // Routing Level Middleware
 module.exports = router;

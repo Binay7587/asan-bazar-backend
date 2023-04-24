@@ -96,6 +96,18 @@ class ProductService {
         }
     }
 
+    // Get Products by Ids
+    getProductsByIds = async (ids) => {
+        try {
+            return await ProductModel.find({ _id: { $in: ids } }).populate('categoryId')
+                .populate('sellerId')
+                .populate('brand')
+                .populate('createdBy');
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // Get product by slug
     getProductBySlug = async (slug) => {
         try {
