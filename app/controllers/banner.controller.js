@@ -27,8 +27,8 @@ class BannerController {
         }
     }
 
-    // List banners for homepage
-    listForHomepage = async (req, res, next) => {
+    // List active banners for homepage
+    listActiveBanners = async (req, res, next) => {
         try {
             const banners = await bannerService.getActiveBanners();
 
@@ -65,6 +65,23 @@ class BannerController {
         }
         catch (err) {
             next({ status: 400, msg: `Create Error: ${err}` });
+        }
+    }
+
+    fetchBannerById = async (req, res, next) => {
+        try {
+            let banner = await bannerService.getBannerById(req.params.id);
+            if (!banner) {
+                throw ('Banner not found.');
+            }
+            res.json({
+                result: banner,
+                message: "Banner fetched successfully",
+                status: true,
+                meta: null
+            })
+        } catch (err) {
+            next({ status: 400, message: `Fetch error: ${err.message ?? err}` });
         }
     }
 

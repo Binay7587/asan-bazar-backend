@@ -38,13 +38,22 @@ class BrandService {
     }
 
     // Get all brands
-    getAllBrands = async (config) => {
+    getAllBrandsList = async (config) => {
         try {
             let skip = (config.page - 1) * config.perPage;
             return await BrandModel.find()
                 .sort({ _id: -1 }) // Sort by descending order
                 .skip(skip)
                 .limit(config.perPage);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    getAllBrands = async (config) => {
+        try {
+            return await BrandModel.find()
+                .sort({ _id: -1 }) // Sort by descending order
         } catch (err) {
             throw err;
         }
@@ -67,6 +76,17 @@ class BrandService {
     getBrandById = async (id) => {
         try {
             return await BrandModel.findById(id);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Get brand by slug
+    getBrandBySlug = async (slug) => {
+        try {
+            return await BrandModel.findOne({
+                slug: slug
+            });
         } catch (err) {
             throw err;
         }

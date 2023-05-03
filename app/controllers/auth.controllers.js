@@ -3,47 +3,53 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AppConstants = require('../../config/constants.js');
 const { sendEmail } = require('../services/mail.service.js');
+const { hashPassword } = require('../../config/functions.js');
 
 class AuthController {
     registerProcess = async (req, res, next) => {
         try {
-            let payload = req.body;
-            payload.address = JSON.parse(payload.address);
-            let exists = await userService.getUserByEmail(payload.email);
-            if (exists) {
-                throw ('Email already exists.');
-            } else {
-                if (req.file) {
-                    payload.userImage = `/uploads/userImage/${req.file.filename}`;
-                }
-                //validation
-                let validatedData = await userService.validateRegisterData(payload);
-                //password encryption
-                validatedData.password = await bcrypt.hash(validatedData.password, 10);
+            const { name, email, password, confirmPassword, address, phone, role, status } = req.body;
 
-                //save to db
-                let response = await userService.registerUser(validatedData);
-
-                // Email notification
-                sendEmail({
-                    from: 'noreply@test.com',
-                    to: validatedData.email,
-                    subject: 'Account Registered!',
-                    textMessage: "Dear " + validatedData.name + ",\n\n" + 'Your account has been registered successfully.',
-                    htmlMessage: "<p>Dear " + validatedData.name + ",</p><p>Your account has been registered successfully.</p>"
-                });
-
-                res.json({
-                    result: response,
-                    msg: "Your account has been registered successfully.",
-                    status: true,
-                    meta: null
-                });
+            let userPayload = await userService.validateRegisterData({
+                name, email, password, confirmPassword, role, phone,
+                address: address ? JSON.parse(address) : null,
+                status: status ?? 'inactive',
+            });
+            // Hash password
+            userPayload.password = await hashPassword(userPayload.password);
+            // Set user profile if file exists
+            if (req.file) {
+                userPayload.userImage = `/userImage/${req.file.filename}`;
             }
+
+            // Check if username and email already exist
+            const userByEmail = await userService.getUserByEmail(userPayload.email);
+
+            if (userByEmail) {
+                throw ("Email already exists");
+            }
+
+            // Store user and user
+            const user = await userService.registerUser(userPayload);
+            // Email notification
+            sendEmail({
+                from: 'noreply@test.com',
+                to: userPayload.email,
+                subject: 'Account Registered!',
+                textMessage: "Dear " + userPayload.name + ",\n\n" + 'Your account has been registered successfully.',
+                htmlMessage: "<p>Dear " + userPayload.name + ",</p><p>Your account has been registered successfully.</p>"
+            });
+
+            res.json({
+                result: user,
+                msg: "User registered successfully",
+                status: true,
+                meta: null
+            });
         }
         catch (err) {
             if (err.name === "SyntaxError") err = "Invalid JSON";
-            next({ status: 400, msg: err });
+            next({ status: 400, msg: err.message ?? err });
         }
     }
 
@@ -83,7 +89,7 @@ class AuthController {
             }
 
         } catch (err) {
-            next({ status: 400, msg: err });
+            next({ status: 400, msg: err.message ?? err });
         }
     }
 
@@ -123,7 +129,7 @@ class AuthController {
                 });
             }
         } catch (err) {
-            next({ status: 400, msg: err });
+            next({ status: 400, msg: err.message ?? err });
         }
     }
 

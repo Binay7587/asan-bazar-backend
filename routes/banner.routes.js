@@ -7,7 +7,7 @@ const router = require("express").Router();
 
 
 // Web 
-router.get("/list", bannerController.listForHomepage);
+router.get("/active", bannerController.listActiveBanners);
 
 // CMS
 router.route("/")
@@ -15,6 +15,7 @@ router.route("/")
     .post(authCheck, isAdmin, uploader.single('bannerImage'), bannerController.createBanner)
 
 router.route("/:id")
+    .get(authCheck, isAdmin, bannerController.fetchBannerById)
     .put(authCheck, isAdmin, uploader.single('bannerImage'), bannerController.updateBanner)
     .delete(authCheck, isAdmin, bannerController.deleteBannerById);
 

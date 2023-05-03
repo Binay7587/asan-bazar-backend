@@ -4,13 +4,13 @@ const slugify = require('slugify');
 
 class BrandController {
     // List all brands
-    listAllBrands = async (req, res, next) => {
+    getAllBrandsList = async (req, res, next) => {
         try {
             // ?page=1&perPage=10
             let currentPage = Number(req.query.page ?? 1);
             let perPage = Number(req.query.perPage ?? 10);
 
-            const brands = await brandService.getAllBrands({ page: currentPage, perPage: perPage });
+            const brands = await brandService.getAllBrandsList({ page: currentPage, perPage: perPage });
 
             res.json({
                 result: brands,
@@ -28,8 +28,24 @@ class BrandController {
         }
     }
 
-    // List brands for homepage
-    listForHomepage = async (req, res, next) => {
+    getAllBrands = async (req, res, next) => {
+        try {
+            const brands = await brandService.getAllBrands();
+
+            res.json({
+                result: brands,
+                msg: "All Brands fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `List Error:  ${err.message ?? err}` });
+        }
+    }
+
+    // List active brands for homepage
+    listActiveBrands = async (req, res, next) => {
         try {
             const brands = await brandService.getActiveBrands();
 
@@ -73,6 +89,40 @@ class BrandController {
         }
         catch (err) {
             next({ status: 400, msg: `Create Error: ${err}` });
+        }
+    }
+
+    fetchBrandById = async (req, res, next) => {
+        try {
+            let brand = await brandService.getBrandById(req.params.id);
+            if (!brand) {
+                throw ('Brand not found.');
+            }
+            res.json({
+                result: brand,
+                message: "Brand fetched successfully",
+                status: true,
+                meta: null
+            })
+        } catch (err) {
+            next({ status: 400, message: `Fetch error: ${err.message ?? err}` });
+        }
+    }
+
+    fetchBrandBySlug = async (req, res, next) => {
+        try {
+            let brand = await brandService.getBrandBySlug(req.params.slug);
+            if (!brand) {
+                throw ('Brand not found.');
+            }
+            res.json({
+                result: brand,
+                message: "Brand fetched successfully",
+                status: true,
+                meta: null
+            })
+        } catch (err) {
+            next({ status: 400, message: `Fetch error: ${err.message ?? err}` });
         }
     }
 
