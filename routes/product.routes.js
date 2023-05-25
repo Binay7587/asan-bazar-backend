@@ -8,6 +8,7 @@ const router = require("express").Router();
 
 // Web 
 router.get("/active", productController.getActiveProducts);
+router.get("/count", productController.fetchProductCount);
 router.get("/slug/:slug", productController.getProductBySlug);
 router.get("/category/:slug", productController.getProductsByCategorySlug);
 router.get("/brand/:slug", productController.getProductsByBrandSlug);

@@ -2,6 +2,22 @@ const { deleteImage, hashPassword } = require('../../config/functions');
 const userService = require('../services/user.service');
 
 class UserController {
+    // Fetch user count
+    fetchUserCount = async (req, res, next) => {
+        try {
+            const count = await userService.getCount();
+            res.json({
+                result: count,
+                msg: "User count fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `Count Error: ${err.message ?? err}` });
+        }
+    }
+
     // List all users
     listAllUsers = async (req, res, next) => {
         try {

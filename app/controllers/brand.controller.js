@@ -3,6 +3,21 @@ const brandService = require('../services/brand.service');
 const slugify = require('slugify');
 
 class BrandController {
+    fetchBrandCount = async (req, res, next) => {
+        try {
+            const count = await brandService.getCount();
+            res.json({
+                result: count,
+                msg: "Brand count fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `Count Error: ${err.message ?? err}` });
+        }
+    }
+    
     // List all brands
     getAllBrandsList = async (req, res, next) => {
         try {
