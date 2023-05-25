@@ -8,6 +8,7 @@ const router = require("express").Router();
 
 // Web 
 router.get("/all", categoryController.getAllCategories);
+router.get("/count", categoryController.fetchCategoryCount);
 router.get("/active", categoryController.getActiveCategories);
 router.get("/featured", categoryController.getFeaturedCategories);
 router.get("/slug/:slug", categoryController.fetchCategoryBySlug);

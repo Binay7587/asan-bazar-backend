@@ -3,6 +3,21 @@ const categoryService = require('../services/category.service');
 const slugify = require('slugify');
 
 class CategoryController {
+    fetchCategoryCount = async (req, res, next) => {
+        try {
+            const count = await categoryService.getCount();
+            res.json({
+                result: count,
+                msg: "Category count fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `Count Error: ${err.message ?? err}` });
+        }
+    }
+    
     getAllCategoriesList = async (req, res, next) => {
         try {
             // ?page=1&perPage=10

@@ -7,6 +7,7 @@ const router = require("express").Router();
 
 // Web 
 router.get("/active", userController.listActiveUsers);
+router.get("/count", userController.fetchUserCount);
 router.get("/type/:type", userController.listUsersByType);
 
 // CMS

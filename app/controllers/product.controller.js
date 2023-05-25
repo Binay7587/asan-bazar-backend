@@ -5,6 +5,21 @@ const productService = require('../services/product.service');
 const slugify = require('slugify');
 
 class ProductController {
+    fetchProductCount = async (req, res, next) => {
+        try {
+            const count = await productService.getCount();
+            res.json({
+                result: count,
+                msg: "Product count fetched successfully.",
+                status: true,
+                meta: null
+            });
+        }
+        catch (err) {
+            next({ status: 400, msg: `Count Error: ${err.message ?? err}` });
+        }
+    }
+
     getAllProductsList = async (req, res, next) => {
         try {
             // ?page=1&perPage=10
