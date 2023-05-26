@@ -1,15 +1,7 @@
 const express = require("express");
+// const cors = require("cors");
 const app = express();
-const cors = require("cors");
-
-// Set up CORS options for preflight requests
-const corsOptions = {
-    origin: ["http://localhost:5173", "https://asan-bazar.vercel.app", "https://asanbazar.binayakarki.com.np"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-app.use(cors(corsOptions));
+// app.use(cors());
 
 const routes = require("./routes");
 const logger = require("./app/middleware/logger.middleware");
