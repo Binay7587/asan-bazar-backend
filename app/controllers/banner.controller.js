@@ -23,7 +23,7 @@ class BannerController {
             });
         }
         catch (err) {
-            next({ status: 400, msg: `List Error: ${err}` });
+            next({ status: 400, msg: `List Error: ${err.message ?? err}` });
         }
     }
 
@@ -40,7 +40,7 @@ class BannerController {
             });
         }
         catch (err) {
-            next({ status: 400, msg: `List Error: ${err}` });
+            next({ status: 400, msg: `List Error: ${err.message ?? err}` });
         }
     }
 
@@ -64,7 +64,7 @@ class BannerController {
             });
         }
         catch (err) {
-            next({ status: 400, msg: `Create Error: ${err}` });
+            next({ status: 400, msg: `Create Error: ${err.message ?? err}` });
         }
     }
 
@@ -109,7 +109,7 @@ class BannerController {
             });
         }
         catch (err) {
-            next({ status: 400, msg: `Update Error: ${err}` });
+            next({ status: 400, msg: `Update Error: ${err.message ?? err}` });
         }
     }
 
@@ -132,7 +132,7 @@ class BannerController {
             }
         }
         catch (err) {
-            next({ status: 400, msg: `Delete Error: ${err}` });
+            next({ status: 400, msg: `Delete Error: ${err.message ?? err}` });
         }
     }
 }
